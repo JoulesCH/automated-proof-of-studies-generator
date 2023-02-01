@@ -1,0 +1,8 @@
+.env/
+*.json
+secret.py
+__pycache__/
+static/*png
+utils/coneccion.py
+static/css/main.css
+static/css/main.css.map

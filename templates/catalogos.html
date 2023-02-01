@@ -1,0 +1,156 @@
+{%extends "/base/base.html"%}
+
+{%block title%}
+    Catálogos
+{%endblock%}
+
+{%block head%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg==" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-angular.min.js" integrity="sha512-KT0oYlhnDf0XQfjuCS/QIw4sjTHdkefv8rOJY5HHdNEZ6AmOh1DW/ZdSqpipe+2AEXym5D0khNu95Mtmw9VNKg==" crossorigin="anonymous"></script>
+
+{%endblock%}
+
+{%block content%}
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/generar">Generar</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/catalogos">Catálogos</a>
+        </li>
+      </ul>
+    <h3 class="mt-3 text-center">Edición de catálogos</h3>
+    {%if cambios%}
+      
+    <div class="alert alert-success mb-4" role="alert" id="box">
+      Cambios guardados con éxito
+      </div>
+    {%endif%}
+    <form action="/catalogos", method="POST" style="margin:30px;">
+        <div class="mb-3 mt-3">
+            <h5>Contenido BEIFI </h5>
+            <textarea class="form-control" id="boletas" required name="contenido_beifi">{{data.BEIFI.contenido}}</textarea>    
+        </div>
+        <div class="mb-3 mt-3">
+            <h5>Contenido CONACYT </h5>
+            <textarea class="form-control" id="boletas" required name="contenido_conacyt">{{data.CONACYT.contenido}}</textarea>    
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3 mt-3">
+                    <h5>Periodo actual inicio</h5>
+                    <input value="{{data.vars.periodo_actual_inicio_fecha}}" class="form-control" name="periodo_actual_inicio_fecha"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 mt-3">
+                    <h5>Periodo actual fin</h5>
+                    <input value="{{data.vars.periodo_actual_fin_fecha}}" class="form-control" name="periodo_actual_fin_fecha"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="mb-3 mt-3">
+                    <h5>Nombre del signatario</h5>
+                    <input value="{{data.vars.nombre_signatario}}" class="form-control" name="nombre_signatario"/>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3 mt-3">
+                    <h5>Puesto del signatario</h5>
+                    <textarea  class="form-control" name="puesto_signatario">{{data.vars.puesto_signatario}}</textarea> 
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="mb-3 mt-3">
+                <h5>Periodos</h5>
+                <textarea  class="form-control" name="periodos">{{', '.join(data.periodos.lista)}}</textarea> 
+            </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <h5>Cambiar plantilla</h5>
+            <p>Se permiten úncamente archivos <i> png </i> y <i> jpg</i>. Una vez seleccionado el archivo, se deberá dar clic en subir archivo y después en guardar cambios.</p>
+            <div class="input-group">
+                <input onChange="enabledButton();" type="file" name="file" class="form-control" accept=".jpg,.png"  id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button disabled onClick="uploadFile();" class="btn btn-secondary" type="button" id="inputGroupFileAddon04">
+                    Subir archivo
+                </button>
+              </div>
+        </div>
+        <input type="hidden" name="file_url" id="file_url" value="{{data.vars.fondo}}">
+
+        <div>
+            <button class="btn btn-primary mt-3" style="width: 100%" type="submit">Guardar cambios</button>
+        </div>
+    </form>
+    <script>
+        function enabledButton(){
+            const button = document.getElementById('inputGroupFileAddon04');
+            button.disabled = false;
+        }
+
+        setTimeout(() => {
+            const box = document.getElementById('box');
+          
+            box.style.display = 'none';
+          
+          }, 3000); 
+        
+        function uploadFile(){
+            const button = document.getElementById('inputGroupFileAddon04');
+            button.innerHTML = `<div class="spinner-border text-light  spinner-border-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div> Subiendo archivo`;
+            button.disabled = true;
+            const file_url = document.getElementById('file_url');
+            const input = document.getElementById('inputGroupFile04');
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+            fetch('/uploadfile', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                file_url.value = result.image_url;
+                setTimeout(() => {
+                    button.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                        <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                        <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                      </svg> Archivo subido`;
+                  
+                  }, 3000); 
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                setTimeout(() => {
+                    button.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-slash-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M11.354 4.646a.5.5 0 0 0-.708 0l-6 6a.5.5 0 0 0 .708.708l6-6a.5.5 0 0 0 0-.708z"/>
+                      </svg> 
+                      Hubo un error`;
+                  
+                  }, 3000); 
+                console.log('Error');
+            });
+            
+            button.innerHTML = 'Subir archivo';
+            button.disabled = false;
+        }
+        
+    </script>
+</div>
+{%endblock%}

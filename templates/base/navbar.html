@@ -1,0 +1,64 @@
+<div style="background-color: #6d1a42; height: 40px;">
+    <div class="text-end px-5 py-2" >
+        {%if request.cookies.get('token')%}
+                <form action="/logout" method="POST">
+                    <span style="color:#dddde2;" onclick="this.parentNode.submit()">
+                        <span class="fs-6" style="color:#dddde2; cursor:pointer;">
+                            Salir
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="cursor:pointer;" fill="#dddde2" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                            <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                        </svg>
+                    </span>
+                </form>
+        {%else%}
+        <div onclick="location.href = '/login';" style="cursor:pointer;">
+            <span class="fs-6" style="color:#dddde2;">
+                Ingresar
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#dddde2" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+                <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+            </svg>
+        </div>
+        {%endif%}
+    </div>
+</div>
+
+<div class="container">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      
+        <a href="/" class="d-flex align-items-center col mb-2 mb-md-0 text-dark text-decoration-none text-dark">
+            <img 
+                src="https://i.ibb.co/4psxTTy/New-Project.png" 
+                alt="triangle with all three sides equal"
+                width="300px" 
+                style="margin-right:20px;"
+            />
+        </a>
+        
+        <div class="col-md-4 text-end">
+            <div class="row">
+                <div class="col">
+                    <span class="fs-4" style="color:black;"> Sistema de Generación de Constancias </span> 
+                </div>
+                <div class="col-3">
+                    <img 
+                        src="https://i.ibb.co/P43dxgf/filename.png" 
+                        alt="triangle with all three sides equal"
+                        width="57px"
+                        height="57px"    
+                        style="margin-right:20px;"
+                    />
+                </div>
+            </div>
+        </div>
+        
+
+    </header>
+  </div>
+
+  <!--<div style="background-color: #363554; height: 50px;">-->
+    
+</div>
